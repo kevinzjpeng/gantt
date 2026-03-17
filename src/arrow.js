@@ -12,7 +12,7 @@ export default class Arrow {
 
     calculate_path() {
         let start_x =
-            this.from_task.$bar.getX() + this.from_task.$bar.getWidth() / 2;
+            this.from_task.$bar.getX() + this.from_task.$bar.getWidth();
 
         const condition = () =>
             this.to_task.$bar.getX() < start_x + this.gantt.options.padding &&
