@@ -1165,6 +1165,8 @@ export default class Gantt {
 
             this.bar_being_dragged = false;
             pos = x_on_start;
+            // Snapshot scroll position at drag start so the lock knows the correct value
+            x_on_scroll_start = this.$container.scrollLeft;
 
             bars.forEach((bar) => {
                 const $bar = bar.$bar;
@@ -1219,6 +1221,14 @@ export default class Gantt {
         }
 
         $.on(this.$container, 'scroll', (e) => {
+            // Lock horizontal scroll while a bar drag / resize is in progress.
+            // Without this the browser's native autoscroll shifts offsetX and
+            // bars jump to the wrong position.
+            if (action_in_progress()) {
+                e.currentTarget.scrollLeft = x_on_scroll_start;
+                return;
+            }
+
             let localBars = [];
             const ids = this.bars.map(({ group }) =>
                 group.getAttribute('data-id'),

@@ -56,10 +56,11 @@ const DEFAULT_VIEW_MODES = [
         padding: '7d',
         date_format: 'YYYY-MM-DD',
         step: '1d',
-        lower_text: (d, ld, lang) =>
-            !ld || d.getDate() !== ld.getDate()
-                ? date_utils.format(d, 'D', lang)
-                : '',
+        lower_text: (d, ld, lang) => {
+            if (ld && d.getDate() === ld.getDate()) return '';
+            const dow = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][d.getDay()];
+            return date_utils.format(d, 'D', lang) + '\n' + dow;
+        },
         upper_text: (d, ld, lang) =>
             !ld || d.getMonth() !== ld.getMonth()
                 ? date_utils.format(d, 'MMMM', lang)
@@ -116,7 +117,7 @@ const DEFAULT_OPTIONS = {
     column_width: null,
     date_format: 'YYYY-MM-DD HH:mm',
     upper_header_height: 45,
-    lower_header_height: 30,
+    lower_header_height: 46,
     snap_at: null,
     infinite_padding: true,
     holidays: { 'var(--g-weekend-highlight-color)': 'weekend' },
